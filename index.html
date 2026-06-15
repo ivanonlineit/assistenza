@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assistenza tecnica diretta — 30 minuti, un problema risolto</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+  :root{
+    --bg: #0f1115;
+    --surface: #171a20;
+    --surface-2: #1e222a;
+    --text: #e9e7e2;
+    --muted: #8b93a3;
+    --green: #5fd98f;
+    --amber: #f2a65a;
+    --hairline: #2a2e37;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .mono{ font-family:'JetBrains Mono', monospace; }
+
+  a{ color:inherit; }
+
+  :focus-visible{
+    outline:2px solid var(--green);
+    outline-offset:3px;
+  }
+
+  .wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  .hero{
+    padding:72px 0 56px;
+    border-bottom:1px solid var(--hairline);
+  }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--green);
+    margin-bottom:18px;
+  }
+
+  h1{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size:clamp(2rem, 6vw, 3.2rem);
+    line-height:1.15;
+    letter-spacing:-0.01em;
+    margin-bottom:18px;
+  }
+
+  .lead{
+    color:var(--muted);
+    font-size:1.05rem;
+    max-width:34em;
+    margin-bottom:32px;
+  }
+
+  .terminal{
+    background:var(--surface);
+    border:1px solid var(--hairline);
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 20px 60px -30px rgba(0,0,0,0.6);
+    margin-bottom:36px;
+  }
+
+  .terminal-bar{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:11px 14px;
+    background:var(--surface-2);
+    border-bottom:1px solid var(--hairline);
+  }
+
+  .dot{
+    width:10px; height:10px;
+    border-radius:50%;
+    background:var(--hairline);
+  }
+
+  .terminal-title{
+    margin-left:8px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    color:var(--muted);
+  }
+
+  .terminal-body{
+    padding:20px 18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.88rem;
+    min-height:168px;
+  }
+
+  .term-line{
+    white-space:pre-wrap;
+    word-break:break-word;
+    opacity:0;
+    margin-bottom:6px;
+  }
+
+  .term-line.show{ opacity:1; }
+
+  .term-line .prompt{ color:var(--green); }
+  .term-line .arrow{ color:var(--muted); }
+  .term-line .ok{ color:var(--green); font-weight:700; }
+
+  .cursor{
+    display:inline-block;
+    width:8px; height:1em;
+    background:var(--green);
+    vertical-align:text-bottom;
+    margin-left:2px;
+    animation:blink 1s step-end infinite;
+  }
+
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .cta{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:var(--amber);
+    color:#1a1306;
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size:0.95rem;
+    padding:14px 26px;
+    border-radius:8px;
+    text-decoration:none;
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .cta:hover{
+    transform:translateY(-1px);
+    box-shadow:0 8px 24px -8px rgba(242,166,90,0.5);
+  }
+
+  section{
+    padding:56px 0;
+    border-bottom:1px solid var(--hairline);
+  }
+
+  section:last-of-type{ border-bottom:none; }
+
+  h2{
+    font-family:'JetBrains Mono', monospace;
+    font-size:1.4rem;
+    margin-bottom:28px;
+  }
+
+  .steps{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+  }
+
+  .step{
+    display:flex;
+    gap:18px;
+  }
+
+  .step-num{
+    font-family:'JetBrains Mono', monospace;
+    color:var(--green);
+    font-weight:700;
+    font-size:0.95rem;
+    flex-shrink:0;
+    padding-top:2px;
+  }
+
+  .step-title{
+    font-weight:600;
+    margin-bottom:4px;
+  }
+
+  .step-desc{
+    color:var(--muted);
+    font-size:0.95rem;
+  }
+
+  .topics{
+    list-style:none;
+    display:grid;
+    gap:14px;
+  }
+
+  .topics li{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    color:var(--muted);
+    font-size:0.98rem;
+  }
+
+  .topics li::before{
+    content:'›';
+    color:var(--green);
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    flex-shrink:0;
+  }
+
+  .topics li span{ color:var(--text); }
+
+  .price-card{
+    background:var(--surface);
+    border:1px solid var(--hairline);
+    border-radius:10px;
+    padding:32px;
+  }
+
+  .price{
+    font-family:'JetBrains Mono', monospace;
+    font-size:2.6rem;
+    font-weight:700;
+    color:var(--amber);
+    line-height:1;
+    margin-bottom:6px;
+  }
+
+  .price-unit{
+    font-family:'JetBrains Mono', monospace;
+    color:var(--muted);
+    font-size:0.95rem;
+    margin-bottom:20px;
+  }
+
+  .price-desc{
+    color:var(--muted);
+    margin-bottom:28px;
+    font-size:0.95rem;
+  }
+
+  .price-note{
+    margin-top:20px;
+    font-size:0.88rem;
+    color:var(--muted);
+    border-top:1px solid var(--hairline);
+    padding-top:18px;
+  }
+
+  .price-note strong{ color:var(--text); }
+
+  .info-box{
+    background:var(--surface-2);
+    border-radius:10px;
+    padding:20px;
+    margin-top:32px;
+    border-left:3px solid var(--green);
+  }
+
+  .info-box-title{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.8rem;
+    color:var(--green);
+    margin-bottom:12px;
+  }
+
+  .info-list{
+    list-style:none;
+    color:var(--muted);
+    font-size:0.9rem;
+  }
+
+  .info-list li{
+    margin-bottom:12px;
+    padding-left:20px;
+    position:relative;
+  }
+
+  .info-list li::before{
+    content:'›';
+    position:absolute;
+    left:0;
+    color:var(--green);
+  }
+
+  footer{
+    padding:40px 0 64px;
+    color:var(--muted);
+    font-size:0.85rem;
+  }
+
+  footer a{ color:var(--green); text-decoration:none; }
+  footer a:hover{ text-decoration:underline; }
+
+  @media (max-width: 640px){
+    .hero{ padding:48px 0 40px; }
+    section{ padding:40px 0; }
+    .price-card{ padding:24px; }
+    .terminal-body {
+      font-size: 0.75rem;
+      padding: 16px 12px;
+    }
+    .term-line {
+      word-break: break-all;
+    }
+    .cta {
+      width: 100%;
+      justify-content: center;
+    }
+    .info-box{ padding:16px; }
+    .info-list li{ margin-bottom:10px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .cursor{ animation:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <section class="hero">
+    <p class="eyebrow">assistenza tecnica · da remoto</p>
+    <h1>Il PC fa i capricci?<br>Lo guardiamo insieme, in 30 minuti.</h1>
+    <p class="lead">
+      Linux, Windows, reti che ballano, configurazioni impossibili, dual boot,
+      WiFi che si disconnette di notte. Una videochiamata, schermo condiviso,
+      e di solito il problema si risolve lì, in diretta.
+    </p>
+
+    <div class="terminal" aria-hidden="true">
+      <div class="terminal-bar">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="terminal-title">sessione@assistenza</span>
+      </div>
+      <div class="terminal-body" id="termBody">
+        <div class="term-line"><span class="prompt">$</span> diagnosi: "il wifi si disconnette ogni notte"</div>
+        <div class="term-line"><span class="arrow">→</span> controllo risparmio energetico su wlan0...</div>
+        <div class="term-line"><span class="arrow">→</span> trovato: power_save attivo</div>
+        <div class="term-line"><span class="prompt">$</span> nmcli connection modify wifi.powersave 2</div>
+        <div class="term-line"><span class="arrow">→</span> riavvio interfaccia di rete...</div>
+        <div class="term-line"><span class="ok">✓ wifi stabile, problema risolto</span><span class="cursor"></span></div>
+      </div>
+    </div>
+
+    <a class="cta" href="https://paypal.me/IvanBertamini/10EUR" target="_blank" rel="noopener">
+      Prenota 30 minuti — 10€
+    </a>
+  </section>
+
+  <section>
+    <h2>Come funziona</h2>
+    <ol class="steps">
+      <li class="step">
+        <span class="step-num mono">01</span>
+        <div>
+          <p class="step-title">Scrivimi il problema</p>
+          <p class="step-desc">Due righe via email su cosa non va: sistema, errore, da quando succede.</p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-num mono">02</span>
+        <div>
+          <p class="step-title">Fissiamo un orario</p>
+          <p class="step-desc">Ti rispondo entro 24 ore con un paio di disponibilità e un link Google Meet.</p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-num mono">03</span>
+        <div>
+          <p class="step-title">Videochiamata + schermo condiviso</p>
+          <p class="step-desc">Clicchi sul link, condividi lo schermo. Io vedo e ti guido passo passo. Tu tieni sempre il controllo.</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="info-box">
+      <div class="info-box-title">📹 Come funziona nel dettaglio</div>
+      <ul class="info-list">
+        <li><strong>Niente installazioni</strong> — uso Google Meet, ti mando un link, clicchi e sei dentro (dal browser)</li>
+        <li><strong>Tu condividi solo quello che vuoi</strong> — puoi condividere una singola finestra (es. il terminale) invece di tutto lo schermo</li>
+        <li><strong>Microfono opzionale</strong> — puoi parlare o scrivere in chat, come preferisci</li>
+        <li><strong>Massima privacy</strong> — io vedo ma non posso muovere il mouse, non controllo il tuo PC. Puoi stoppare la condivisione quando vuoi</li>
+        <li><strong>Funziona anche da smartphone/tablet</strong> — ma per problemi tecnici è meglio da computer</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Di cosa mi occupo</h2>
+    <ul class="topics">
+      <li><span>Linux</span> — Fedora, Ubuntu, dual boot con Windows, driver, hibernation</li>
+      <li><span>Reti domestiche</span> — WiFi instabile, streaming che si blocca, configurazioni router</li>
+      <li><span>Sistema</span> — installazioni, partizioni, backup, recupero file</li>
+      <li><span>Configurazioni</span> — periferiche, autenticazione, dischi esterni, ambienti desktop</li>
+      <li><span>Problemi "strani"</span> — quelli che nessun forum ha saputo risolvere del tutto</li>
+    </ul>
+  </section>
+
+  <section id="prenota">
+    <h2>Prenota la sessione</h2>
+    <div class="price-card">
+      <p class="price">10€</p>
+      <p class="price-unit mono">/ 30 minuti</p>
+      <p class="price-desc">
+        Niente abbonamenti, niente upsell. Se il problema si risolve prima,
+        va bene comunque — non c'è un cronometro che corre contro di te.
+      </p>
+      <a class="cta" href="https://paypal.me/IvanBertamini/10EUR" target="_blank" rel="noopener">
+        Paga con PayPal — 10€
+      </a>
+      <p class="price-note">
+        <strong>Dopo il pagamento</strong>, scrivimi a
+        <a href="mailto:ivan.assistenza@proton.me">ivan.assistenza@proton.me</a>
+        con una breve descrizione del problema e 2-3 orari in cui sei libero.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Rispondo di solito entro 24 ore. Sessioni in videochiamata, in italiano.</p>
+    <p style="margin-top: 12px; font-size: 0.75rem;">🔐 Pagamento sicuro PayPal</p>
+  </footer>
+
+</div>
+
+<script>
+  const lines = document.querySelectorAll('#termBody .term-line');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (reduced) {
+    lines.forEach(l => l.classList.add('show'));
+  } else {
+    lines.forEach((line, i) => {
+      setTimeout(() => line.classList.add('show'), 400 + i * 650);
+    });
+  }
+</script>
+
+</body>
+</html>
